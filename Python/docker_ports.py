@@ -9,17 +9,17 @@ containers = client.containers.list(all=True)
 
 # Loop through each container
 for container in containers:
-  # Get the name and the ports of the container
-  name = container.name
-  ports = container.ports
-  #The items() method returns a view object. The view object contains the key-value pairs of the dictionary, as tuples in a list.
-  for container, port_data in ports.items():
-    if port_data:
-        first_value = next(iter(port_data), {}).get('HostPort', '').split('/')[0]
-        print(f"Container: {container} Port: {first_value}")
-    else:
-        print(f"Container: {container} Port: No port information available")
+    # Get the name and the ports of the container
+    name = container.name
+    ports = container.ports
 
-  # Print the name and the ports of the container
-  #print(type(ports))
-  print(f"{name}" + '' + "{first_value}")
+    # Loop through the ports of the container
+    for container_port, port_data in ports.items():
+        if port_data:
+            first_value = next(iter(port_data), {}).get('HostPort', '').split('/')[0]
+            # Print the name and the ports of the container
+            print(f"{name} {first_value}")
+            break  # Break out of the inner loop after printing the first port
+
+    # Print a newline to separate the output for each container
+    print()
