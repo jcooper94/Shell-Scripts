@@ -22,4 +22,4 @@ for container in containers:
 
   # Print the name and the ports of the container
   #print(type(ports))
-  print(f"Container: {name}" + '' + "Port: {first_value}")
+  print(f"{name}" + '' + "{first_value}")
