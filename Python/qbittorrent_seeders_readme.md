@@ -20,5 +20,3 @@ For subsequent executions of the script, it will retrieve the necessary informat
 Click on the image below to view a demonstration of the script on YouTube:
 
 [![Qbittorrent Seeder Remover Python Script](qbittorrent_seeders_image.png)](https://www.youtube.com/watch?v=zKL-65rdYiA)
-
-Please note that the actual image will not be displayed in this text. In your README file, replace `qbittorrent_seeders_image.png` with the actual path to your image file.
