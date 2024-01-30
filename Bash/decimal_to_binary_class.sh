@@ -2,6 +2,7 @@
 
 #global variables
 og_num=""
+og_ip=""
 
 function to_binary() {
     # decimal to binary
@@ -9,7 +10,11 @@ function to_binary() {
 
     binary=()
 
-    read -p "Input the decimal number: " decimal
+    read -p "Input the IP Address: " ip
+
+    declare -g og_ip=$ip
+
+    decimal="${ip%%.*}"
 
     declare -g og_num=$decimal
 
@@ -36,12 +41,26 @@ function to_class() {
 
     # Determine the class based on the first four digits
     case $first_four in
-    "0"*) echo "Class A" ;;
-    "10"*) echo "Class B" ;;
-    "110"*) echo "Class C" ;;
-    "1110"*) echo "Class D" ;;
-    "1111"*) echo "Class E" ;;
+    "0"*) echo "A" ;;
+    "10"*) echo "B" ;;
+    "110"*) echo "C" ;;
+    "1110"*) echo "D" ;;
+    "1111"*) echo "E" ;;
     esac
+}
+
+function to_subnet() {
+    case $class in
+    "A") echo "255.0.0.0.";;
+    "B") echo "255.255.0.0";;
+    "C") echo "255.255.255.0";;
+    "D") echo "Undefined";;
+    "E") echo "Undefined";;
+    esac
+}
+
+function to_info() {
+    echo "test $og_ip"
 }
 
 # call the function and set the echo to a variable and echo the variable since no return like in python
@@ -49,6 +68,10 @@ binary=$(to_binary)
 
 class=$(to_class $binary)
 
+subnet=$(to_subnet $class)
+
 echo "The integer $og_num in binary is $binary."
 
-echo "It is a $class address."
+echo "It is a class $class address."
+
+echo "The subnet mask is $subnet."
