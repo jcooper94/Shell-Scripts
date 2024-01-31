@@ -59,8 +59,18 @@ function to_subnet() {
     esac
 }
 
+function to_subhosts() {
+    echo "test"
+    # #of subnets = 2^subnet bits
+    # # hosts per subnet = 2^host bits - 2
+}
+
 function to_info() {
     echo "test $og_ip"
+    #network address
+    #network broadcast address
+    #first usable address
+    #last usable host address
 }
 
 # call the function and set the echo to a variable and echo the variable since no return like in python
