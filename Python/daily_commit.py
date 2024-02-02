@@ -18,8 +18,12 @@ td = soup.find('td', {'data-date': today.isoformat()})
 # If the data-level attribute is 0, make a commit
 if td and td.get('data-level') == '0':
     # Clone the repository
-    repo = Repo.clone_from("https://github.com/jcooper94/Playground.git", "Playground")
+    if os.path.exists("./Playground"):
+        print('Already Exists')
+    else:
+        repo = Repo.clone_from("https://github.com/jcooper94/Playground.git", "Playground")
 
+    repo = Repo("./Playground")  # Corrected line
     # Create a 'bash' directory if it doesn't exist
     bash_dir = os.path.join(repo.working_tree_dir, 'bash')
     os.makedirs(bash_dir, exist_ok=True)
