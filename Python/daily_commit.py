@@ -3,7 +3,10 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 from git import Repo
+from config import github_token
 
+# Ask for the token
+token = github_token
 # Get today's date
 today = datetime.date.today()
 
@@ -18,14 +21,15 @@ td = soup.find('td', {'data-date': today.isoformat()})
 # If the data-level attribute is 0, make a commit
 if td and td.get('data-level') == '0':
     # Clone the repository
-    if os.path.exists("./Playground"):
+    if os.path.exists("./Bash"):
+        repo = Repo("./Bash")
         print('Already Exists')
     else:
-        repo = Repo.clone_from("https://github.com/jcooper94/Playground.git", "Playground")
+        repo = Repo.clone_from("https://github.com/jcooper94/Playground/tree/main/Bash.git", "Bash")
 
-    repo = Repo("./Playground")  # Corrected line
+      # Corrected line
     # Create a 'bash' directory if it doesn't exist
-    bash_dir = os.path.join(repo.working_tree_dir, 'bash')
+    bash_dir = os.path.join(repo.working_tree_dir, 'Bash')
     os.makedirs(bash_dir, exist_ok=True)
 
     # Create a new file with today's date
@@ -39,5 +43,10 @@ if td and td.get('data-level') == '0':
     # Make a commit
     repo.git.commit('-m', f'daily commit {today.isoformat()}')
 
-    # Push the changes
-    repo.git.push()
+    # Try to push if error then print error
+    try:
+        # Push to repo
+        repo.git.push('origin', 'master', env={'GIT_ASKPASS': token})
+        print('Pushed!')
+    except:
+        print('Error!')
