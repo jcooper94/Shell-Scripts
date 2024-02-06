@@ -25,9 +25,9 @@ if response.status_code == 200:
     td = soup.find('td', {'data-date': today.isoformat()})
     print('found td')
 
-    # If the data-level attribute is 1, make a commit
+    # If the data-level attribute is 0 (no pushes to github today), make a commit
     if td and td.get('data-level') == '0':
-        print('data is 0 so we need to make a daily commit and push')
+        print('data is 1')
 
         # Set the repository path
         repo_path = "/home/autoimmune/commit/Daily/Bash"
