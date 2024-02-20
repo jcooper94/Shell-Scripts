@@ -33,7 +33,7 @@ qemu-img create -f qcow2 disk.qcow2 8G
 echo "Invoking installer with preseed configuration file..."
 qemu-system-aarch64 -smp 2 -cpu cortex-a57 -m 1G \
     -initrd initrd.gz \
-    -kernel linux -append "root=/dev/ram console=ttyAMA0 auto=true url=http://example.com/preseed.cfg" \
+    -kernel linux -append "root=/dev/ram console=ttyAMA0 auto=true url=preseed.cfg" \
     -drive file=disk.qcow2,format=qcow2 \
     -device e1000,netdev=net0 \
     -netdev user,hostfwd=tcp:127.0.0.1:2222-:22
