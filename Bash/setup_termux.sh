@@ -1,7 +1,13 @@
 #!/bin/bash
 pkg update && pkg upgrade -y
 pkg install openssh
+#start the openssh daemon
 sshd
+#tells user the ip address to ssh to
+ssh_ip=$(ifconfig | grep inet | grep -v "127.0.0.1" | awk '{print $2}')
+ssh_hostname=$(whoami)
+RED='\033[0;31m'
+echo -e "${RED}on remote device type \n ssh $ssh_hostname@$ssh_ip -p8022${RED}"
 # Install QEMU
 echo "Installing QEMU..."
 pkg install -y gnupg
