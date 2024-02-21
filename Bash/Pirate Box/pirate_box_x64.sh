@@ -35,16 +35,57 @@ echo "Avast Ye Land Lubber Welcome Aboard to Ye Ole Pirate Box! Let me pour ye s
 #change /etc/issue
 echo Ahoy Matey!  Go on login and let ole captain piratebox tell ye a tale! | tee /etc/issue >/dev/null
 
-#INSTALL SCREENFETCH
-cd /usr/local/bin/
-wget -O screenfetch https://raw.githubusercontent.com/KittyKatt/screenFetch/master/screenfetch-dev
-chmod +x screenfetch
-#in future once everything works add pirate ascii art to source code
+# Create a temporary file with the desired content
+cat << 'EOF' > /tmp/profile_tmp
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+export PAGER=less
+umask 022
+# Set up PS1 for bash and busybox ash
+if [ -n "$BASH_VERSION" ] || [ -n "$BB_ASH_VERSION" ]; then
+    PS1='\[\033[1;31m\][\[\033[1;33m\]\u\[\033[1;32m\]@\h \[\033[1;34m\]\w\[\033[1;31m\]]\$\[\033[0m\] '
+# Set up PS1 for zsh
+elif [ -n "$ZSH_VERSION" ]; then
+    PS1='%m:%~%# '
+# Fallback default PS1
+else
+    PS1='\[\033[1;31m\][\[\033[1;33m\]\u\[\033[1;32m\]@\h \[\033[1;34m\]\w\[\033[1;31m\]]\$\[\033[0m\] '
+    [ "$(id -u)" -eq 0 ] && PS1="${PS1}# " || PS1="${PS1}\$ "
+fi
+
+for script in /etc/profile.d/*.sh; do
+    if [ -r "$script" ]; then
+        . "$script"
+    fi
+done
+unset script
+EOF
+# Replace /etc/profile with the content of the temporary file
+mv /tmp/profile_tmp /etc/profile
 
 #INSTALL NEOFETCH
 wget https://raw.githubusercontent.com/dylanaraps/neofetch/master/neofetch
 chmod +x neofetch
-#in future once everything works add pirate ascii art to source code
+
+#create neofetch ascii logo
+cat << EOF > /etc/ascii_art.txt
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠀⠤⠴⠶⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣶⣾⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠂⠉⡇⠀⠀⠀⢰⣿⣿⣿⣿⣧⠀⠀⢀⣄⣀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢠⣶⣶⣷⠀⠀⠀⠸⠟⠁⠀⡇⠀⠀⠀⠀⠀⢹⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠘⠟⢹⣋⣀⡀⢀⣤⣶⣿⣿⣿⣿⣿⡿⠛⣠⣼⣿⡟⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣴⣾⣿⣿⣿⣿⢁⣾⣿⣿⣿⣿⣿⣿⡿⢁⣾⣿⣿⣿⠁⠀⠀⠀⠀
+⠀⠀⠀⠀⠸⣿⣿⣿⣿⣿⣿⢸⣿⣿⣿⣿⣿⣿⣿⡇⢸⣿⣿⣿⠿⠇⠀⠀⠀⠀
+⠀⠀⠀⠳⣤⣙⠟⠛⢻⠿⣿⠸⣿⣿⣿⣿⣿⣿⣿⣇⠘⠉⠀⢸⠀⢀⣠⠀⠀⠀
+⠀⠀⠀⠀⠈⠻⣷⣦⣼⠀⠀⠀⢻⣿⣿⠿⢿⡿⠿⣿⡄⠀⠀⣼⣷⣿⣿⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⣶⣄⡈⠉⠀⠀⢸⡇⠀⠀⠉⠂⠀⣿⣿⣿⣧⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⣿⣷⣤⣀⣸⣧⣠⣤⣴⣶⣾⣿⣿⣿⡿⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠟⠛⠉⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+EOF
+
+#create alias for neofetch
+echo "alias neofetch='neofetch --source /etc/ascii_art.txt'" >> ~/.ashrc 
 
 #INSTALL DOCKER AND DOCKER COMPOSE
 apk add docker
